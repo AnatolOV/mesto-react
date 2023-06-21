@@ -1,0 +1,15 @@
+.elements {
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content: space-between; */
+  gap: 17px;
+  padding-top: 51px;
+  width: 100%;
+}
+
+@media (max-width: 903px) and (min-width: 320px) {
+  .elements {
+    padding-top: 36px;
+    justify-content: center;
+  }
+}

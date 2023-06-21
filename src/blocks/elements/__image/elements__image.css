@@ -1,0 +1,7 @@
+.elements__image {
+  display: block;
+  width: 100%;
+  height: 284px;
+  box-sizing: border-box;
+  cursor: pointer;
+}

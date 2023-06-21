@@ -1,0 +1,8 @@
+.header__info {
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    right: 0;
+}

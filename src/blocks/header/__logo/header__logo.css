@@ -1,0 +1,15 @@
+.header__logo {
+  width: 142px;
+  height: 33px;
+  background-image: url(../../../vendor/images/Vector.png);
+  background-repeat: no-repeat;
+}
+
+@media (max-width: 903px) and (min-width: 320px) {
+  .header__logo {
+    width: 104px;
+    height: 25px;
+    background-image: url(../../../vendor/images/logo-mobile.svg);
+    padding-bottom: 32px;
+  }
+}

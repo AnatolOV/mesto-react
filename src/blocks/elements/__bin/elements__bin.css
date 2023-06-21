@@ -1,0 +1,18 @@
+.elements__bin {
+    display: block;
+    visibility: hidden;
+    border: none;
+    width: 18px;
+    height: 19px;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background-image: url(../../../vendor/images/Trash.svg);
+    background-repeat: no-repeat;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.elements__bin:hover {
+    opacity: 0.6;
+}

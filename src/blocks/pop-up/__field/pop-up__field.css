@@ -1,0 +1,28 @@
+.pop-up__field {
+  width: 358px;
+  height: 27px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  margin-top: 30px;
+  border: none;
+  font-size: 14px;
+  font-weight: 400;
+  padding-bottom: 13px;
+  color: #000;
+  border-bottom: 1px solid black;
+}
+
+.pop-up__field:focus {
+  outline: none;
+}
+
+@media (max-width: 903px) and (min-width: 320px) {
+  .pop-up__field {
+    width: 238px;
+    margin-top: 30px;
+    font-size: 14px;
+    padding-bottom: 0px;
+  }
+}

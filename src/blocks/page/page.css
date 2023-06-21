@@ -1,0 +1,15 @@
+.page {
+  margin-left: auto;
+  margin-right: auto;
+  z-index: -1;
+  color: white;
+  max-width: 880px;
+  padding-top: 45px;
+}
+
+@media (max-width: 903px) and (min-width: 320px) {
+  .page {
+    max-width: 320px;
+    padding-top: 28px;
+  }
+}

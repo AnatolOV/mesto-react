@@ -1,0 +1,17 @@
+.pop-up__container-photo {
+    display: block;
+    min-width: 816px;
+    height: 562px;
+    max-width: 75vw;
+    max-height: vh;
+    /* border: solid 2px white; */
+    border-radius: 0;
+
+}
+
+@media (max-width: 903px) and (min-width: 320px) {
+    .pop-up__container-photo {
+        min-width: 240px;
+        height: 299px;
+    }
+}
