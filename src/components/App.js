@@ -34,20 +34,21 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
     React.useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+
+  const [isInfoTooltipPopup, setIsInfoTooltipPopup] = useState(false);
+  const [isSignIn, setIsSignIn] = useState(true);
+  const [isRenderLoading, setIsRenderLoading] = useState(false);
+  //////////////////
+  React.useEffect(() => {
+    checkToken();
+  }, []);
+
   function logOut() {
     setLoggedIn(false);
     setCurrentUser(defaultCurrentUser);
     localStorage.removeItem('jwt');
   }
-  const [isInfoTooltipPopup, setIsInfoTooltipPopup] = useState(false);
-  const [isSignIn, setIsSignIn] = useState(true);
-  const [isRenderLoading, setIsRenderLoading] = useState(false);
-  //////////////////
-   React.useEffect(() => {
-     checkToken();
-   }, []);
 
-   
   React.useEffect(() => {
     if (loggedIn) {
       Promise.all([api.getInfo(), api.getInitialCards()])
@@ -104,7 +105,7 @@ function App() {
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
   }
- 
+
   function checkToken() {
     const token = localStorage.getItem('jwt');
     if (token) {
@@ -126,8 +127,6 @@ function App() {
         });
     }
   }
- 
-
 
   function handleCardClick(card) {
     setSelectedCard(card);
@@ -176,8 +175,8 @@ function App() {
   function handleUpdateUser(data) {
     api
       .editUserInfo(data)
-      .then((newUser) => {
-        setCurrentUser(newUser);
+      .then((userDataServer) => {
+        setCurrentUser({ ...currentUser, ...userDataServer });
         closeAllPopups();
       })
       .catch((err) => console.log(err));
@@ -187,8 +186,8 @@ function App() {
   function handleUpdateAvatar(data) {
     api
       .patchAvatarInfo(data)
-      .then((newAvatar) => {
-        setCurrentUser(newAvatar);
+      .then((userDataServer) => {
+        setCurrentUser({ ...currentUser, ...userDataServer });
         closeAllPopups();
       })
       .catch((err) => {
@@ -218,79 +217,74 @@ function App() {
         setCards([newCard, ...cards]);
         closeAllPopups();
       })
-      .then(() => console.log(555))
       .catch((err) => console.log(err));
   }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <div classNameName="App">
-        <ImagePopup
-          card={selectedCard}
-          onClose={() => {
-            setSelectedCard(null);
-          }}
-        />
-        <AddPlacePopup
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          onSubmit={handleAddPlaceSubmit}
-        />
+      <ImagePopup
+        card={selectedCard}
+        onClose={() => {
+          setSelectedCard(null);
+        }}
+      />
+      <AddPlacePopup
+        isOpen={isAddPlacePopupOpen}
+        onClose={closeAllPopups}
+        onSubmit={handleAddPlaceSubmit}
+      />
 
-        <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateUser}
-          isRenderLoading={isRenderLoading}
-          renderLoading={renderLoading}
-        />
-        <EditAvatarPopup
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar}
-          isRenderLoading={isRenderLoading}
-          renderLoading={renderLoading}
-        />
+      <EditProfilePopup
+        isOpen={isEditProfilePopupOpen}
+        onClose={closeAllPopups}
+        onUpdateAvatar={handleUpdateUser}
+        isRenderLoading={isRenderLoading}
+        renderLoading={renderLoading}
+      />
 
-        <InfoTooltip
-          name="tooltip"
-          isOpen={isInfoTooltipPopup}
-          onClose={closeAllPopups}
-          isSignIn={isSignIn}
-        />
+      <EditAvatarPopup
+        isOpen={isEditAvatarPopupOpen}
+        onClose={closeAllPopups}
+        onUpdateAvatar={handleUpdateAvatar}
+        isRenderLoading={isRenderLoading}
+        renderLoading={renderLoading}
+      />
 
-        <div className="page">
-          <Header
-            loggedIn={loggedIn}
-            email={currentUser.email}
-            logOut={logOut}
+      <InfoTooltip
+        name="tooltip"
+        isOpen={isInfoTooltipPopup}
+        onClose={closeAllPopups}
+        isSignIn={isSignIn}
+      />
+
+      <div className="page">
+        <Header loggedIn={loggedIn} email={currentUser.email} logOut={logOut} />
+        <Routes>
+          <Route
+            path="/sign-up"
+            element={<Register onRegister={handleRegister} />}
           />
-          <Routes>
-            <Route
-              path="/sign-up"
-              element={<Register onRegister={handleRegister} />}
-            />
-            <Route path="/sign-in" element={<Login onLogin={handleLogin} />} />
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute
-                  loggedIn={loggedIn}
-                  element={Main}
-                  onEditProfile={handleEditProfileClick}
-                  onAddPlace={() => setIsAddPlacePopupOpen(true)}
-                  onEditAvatar={() => setIsEditAvatarPopupOpen(true)}
-                  onCardLike={handleCardLike}
-                  onCardClick={handleCardClick}
-                  onCardDelete={handleCardDelete}
-                  cards={cards}
-                />
-              }
-            />
-          </Routes>
+          <Route path="/sign-in" element={<Login onLogin={handleLogin} />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute
+                loggedIn={loggedIn}
+                element={Main}
+                onEditProfile={handleEditProfileClick}
+                onAddPlace={() => setIsAddPlacePopupOpen(true)}
+                onEditAvatar={() => setIsEditAvatarPopupOpen(true)}
+                onCardLike={handleCardLike}
+                onCardClick={handleCardClick}
+                onCardDelete={handleCardDelete}
+                cards={cards}
+              />
+            }
+          />
+          <Route path="/*" element={<Login onLogin={handleLogin} />} />
+        </Routes>
 
-          <Footer loggedIn={loggedIn} />
-        </div>
+        <Footer loggedIn={loggedIn} />
       </div>
     </CurrentUserContext.Provider>
   );
